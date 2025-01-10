@@ -1,20 +1,10 @@
-from flask import Flask, jsonify
-
-app = Flask(__name__)
-
+from flask import Flask
+app = Flask(name)
+@app.route('/hello/<name>')
+def hello_name(name):
+    return 'Hello %s:' % name
 @app.route('/')
-def home():
-    return jsonify({
-        "message": "Welcome to Task Manager API",
-        "status": "running",
-        "version": "1.0.0"
-    })
-
-@app.route('/health')
-def health():
-    return jsonify({
-        "status": "healthy"
-    })
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+def hello_world():
+    return 'Hello World'
+if name == 'main':
+    app.run(host='0.0.0.0', port=5000, debug=True)

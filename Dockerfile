@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.9
 
 WORKDIR /app
 
@@ -9,7 +9,4 @@ COPY . .
 
 EXPOSE 5000
 
-ENV FLASK_APP=app/main.py
-ENV FLASK_ENV=development
-
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["python", "main.py"]
