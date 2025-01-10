@@ -14,17 +14,18 @@ jobs:
     - uses: actions/checkout@v2
     
     - name: Build Docker Image
-      run: docker build -t your-image-name .
+      run: docker build -t my-flask-app .
     
     - name: Run Tests
       run: |
         echo "Running tests..."
         echo "Test"
-      - name: Run Trivy Scan
-    uses: aquasecurity/trivy-action@master
-    with:
-      image-ref: 'my-flask-app'
-      format: 'table'
-      exit-code: '1'
-      ignore-unfixed: true
-      severity: 'CRITICAL,HIGH'
+
+    - name: Run Trivy Scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'my-flask-app'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: 'true'
+        severity: 'CRITICAL,HIGH'
