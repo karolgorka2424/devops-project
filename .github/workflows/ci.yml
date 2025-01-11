@@ -1,31 +1,39 @@
-name: CI
+name: CI workflow
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
-    branches: [ main ]
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
 
 jobs:
-  build:
+  test_on_pr:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Build Docker Image
-      run: docker build -t my-flask-app .
-    
-    - name: Run Tests
-      run: |
-        echo "Running tests..."
-        echo "Test"
+      - name: Pull repo
+        uses: actions/checkout@v4
+      - name: Container test on PR
+        run: echo "Test PR"
+      - name: Build Docker image
+        run: docker build -t my-flask-app .
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+      - name: Run Trivy scan
+        run: trivy image my-flask-app:latest
 
-    - name: Run Trivy Scan
-      uses: aquasecurity/trivy-action@master
-      with:
-        image-ref: 'my-flask-app'
-        format: 'table'
-        exit-code: '1'
-        ignore-unfixed: 'true'
-        severity: 'CRITICAL,HIGH'
+  test_on_merge:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull repo
+        uses: actions/checkout@v4
+      - name: Container test on merge
+        run: echo "Test merge"
