@@ -1,9 +1,17 @@
-# Task Manager API
+# 1. Build the Docker image
+docker build -t my-flask-app .
 
-A simple Flask-based Task Manager API with Docker containerization and CI/CD pipeline.
+# 2. Run the container
+docker run -p 5000:5000 my-flask-app
 
-## Development Setup
+Once running, you can test the endpoints:
 
-1. Install dependencies:
-```bash
-pip install -r requirements.txt
+-Visit http://localhost:5000/ to see "Hello World"
+-Visit http://localhost:5000/hello/YourName to see "Hello YourName"
+
+If running in GitHub CodeSpaces:
+
+-Visit [https://yourname-yourproject-xxxx.preview.app.github.dev] to see "Hello World"
+-Visit [https://yourname-yourproject-xxxx.preview.app.github.dev/hello/]YourName to see "Hello YourName"
+
+Change project name and your name accordingly
